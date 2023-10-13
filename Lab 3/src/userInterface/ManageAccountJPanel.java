@@ -170,7 +170,7 @@ public class ManageAccountJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         Account result = accountDirectory.searchAccount(txtSearch.getText());
         if(result == null){
-            JOptionPane.showMessageDialog(null, "Accoutn number does not exist","Information", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Account number does not exist","Information", JOptionPane.INFORMATION_MESSAGE);
         } else {
             ViewAccountJPanel panel = new ViewAccountJPanel(userProcessContainer, result);
             userProcessContainer.add("ViewAccountJPanel",panel);

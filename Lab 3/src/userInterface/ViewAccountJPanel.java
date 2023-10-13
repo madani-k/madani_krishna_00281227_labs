@@ -35,7 +35,7 @@ public class ViewAccountJPanel extends javax.swing.JPanel {
         
         txtAccountNumber.setText(account.getAccountNumber());
         txtBankName.setText(account.getBankName());
-        txtRoutingNumber.setText(account.getBankName());
+        txtRoutingNumber.setText(account.getRoutingNumber());
         
     }
     /**
@@ -150,7 +150,7 @@ public class ViewAccountJPanel extends javax.swing.JPanel {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        txtAccountNumber.setEnabled(true);
+       txtAccountNumber.setEnabled(true);
        txtBankName.setEnabled(true);
        txtRoutingNumber.setEnabled(true);
        btnSave.setEnabled(true);
