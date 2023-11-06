@@ -32,6 +32,7 @@ public class SupplierWorkAreaJPanel extends javax.swing.JPanel {
         this.supplier = supplier;
         if (supplier != null) lblWelcome.setText("Welcome to Lab 4, "+supplier.getSupplyName());
         
+        btnSupplierProfile.setEnabled(true);
 //      masterOrderCatalog = moc;
     }
 
@@ -171,6 +172,10 @@ public class SupplierWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnSupplierProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSupplierProfileActionPerformed
         // TODO add your handling code here:
+        UpdateSupplierProfile updateSupplierProfilePanel = new UpdateSupplierProfile(workArea, supplier);
+        workArea.add("UpdateSupplierProfile", updateSupplierProfilePanel);
+        CardLayout layout = (CardLayout) workArea.getLayout();
+        layout.next(workArea);
     }//GEN-LAST:event_btnSupplierProfileActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed

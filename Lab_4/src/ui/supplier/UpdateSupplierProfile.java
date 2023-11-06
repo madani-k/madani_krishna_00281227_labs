@@ -9,8 +9,9 @@
  * Created on Oct 1, 2011, 11:55:16 AM
  */
 
-package ui.admin;
+package ui.supplier;
 
+import ui.admin.*;
 import model.Supplier;
 import model.SupplierDirectory;
 import java.awt.CardLayout;
@@ -33,27 +34,37 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author Rushabh
  */
-public class AddSupplier extends javax.swing.JPanel {
+public class UpdateSupplierProfile extends javax.swing.JPanel {
 
     private JPanel workArea;
-    private SupplierDirectory supplierDirectory;
-    
-    private final JFileChooser fileChooser = new JFileChooser();
-    ImageIcon logoImage;
+    private Supplier supplier;
+    private ImageIcon logoImage;
+    private final JFileChooser fileChooser;
     
     /** Creates new form AddSupplier */
-    public AddSupplier(JPanel workArea, SupplierDirectory supplierDirectory) {
-        initComponents();
+    public UpdateSupplierProfile(JPanel workArea, Supplier supplier) {
         this.workArea = workArea;
-        this.supplierDirectory = supplierDirectory;
+        this.supplier = supplier;
+        initComponents();
+        populateSupplierDetails();
         
-        FileFilter jpegFilter = new FileNameExtensionFilter("JPEG file", "jpg", "jpeg");
-        FileFilter pngFilter = new FileNameExtensionFilter("PNG file", "png", "png");
+        fileChooser = new JFileChooser();
 
+        FileFilter jpegFilter = new FileNameExtensionFilter("JPEG file", "jpg", "jpeg");
+        FileFilter pngFilter = new FileNameExtensionFilter("PNG file", "png");
         fileChooser.addChoosableFileFilter(jpegFilter);
         fileChooser.addChoosableFileFilter(pngFilter);
         fileChooser.setFileFilter(pngFilter);
     
+    }
+    
+    private void populateSupplierDetails() {
+        txtName.setText(supplier.getSupplyName());
+        logoImage = supplier.getLogoImage();
+        imgLogo.setIcon(logoImage);
+        txtDescription.setText(supplier.getDescription());        
+        //System.out.println("Description: " + supplier.getDescription()); // For debugging
+
     }
 
     /** This method is called from within the constructor to
@@ -68,11 +79,11 @@ public class AddSupplier extends javax.swing.JPanel {
         lblName = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         lblTitle = new javax.swing.JLabel();
-        btnAddSupplier = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
         backButton = new javax.swing.JButton();
         lblDescription = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtDescription = new javax.swing.JTextArea();
         lblLogo = new javax.swing.JLabel();
         imgLogo = new javax.swing.JLabel();
         btnAttach = new javax.swing.JButton();
@@ -84,10 +95,10 @@ public class AddSupplier extends javax.swing.JPanel {
 
         lblTitle.setText("New Supplier Information:");
 
-        btnAddSupplier.setText("Add");
-        btnAddSupplier.addActionListener(new java.awt.event.ActionListener() {
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddSupplierActionPerformed(evt);
+                btnUpdateActionPerformed(evt);
             }
         });
 
@@ -100,9 +111,9 @@ public class AddSupplier extends javax.swing.JPanel {
 
         lblDescription.setText("Description:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtDescription.setColumns(20);
+        txtDescription.setRows(5);
+        jScrollPane1.setViewportView(txtDescription);
 
         lblLogo.setText("Logo:");
 
@@ -157,7 +168,7 @@ public class AddSupplier extends javax.swing.JPanel {
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(138, 138, 138)
-                        .addComponent(btnAddSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(423, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -184,24 +195,26 @@ public class AddSupplier extends javax.swing.JPanel {
                     .addComponent(lblLogo)
                     .addComponent(imgLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(62, 62, 62)
-                .addComponent(btnAddSupplier)
+                .addComponent(btnUpdate)
                 .addContainerGap(152, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSupplierActionPerformed
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        Supplier supplier = supplierDirectory.addSupplier();
-        supplier.setSupplyName(txtName.getText());
+        String name = txtName.getText();
+        String description = txtDescription.getText();
         
-        String description = jTextArea1.getText();
+        if(name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Name cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        supplier.setSupplyName(name);
         supplier.setDescription(description);
-    
-        supplier.setLogoImage(logoImage);
-        
-        JOptionPane.showMessageDialog(this, "Supplier successfully added", "Warning", JOptionPane.INFORMATION_MESSAGE);
+
+        JOptionPane.showMessageDialog(this, "Supplier updated successfully", "Update", JOptionPane.INFORMATION_MESSAGE);
         backAction();
-    }//GEN-LAST:event_btnAddSupplierActionPerformed
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
@@ -210,32 +223,28 @@ public class AddSupplier extends javax.swing.JPanel {
 
     private void btnAttachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttachActionPerformed
         // TODO add your handling code here:
-        
         int returnVal = fileChooser.showOpenDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            URL url;
             try {
-                url = file.toURI().toURL();
+                URL url = file.toURI().toURL();
                 logoImage = new ImageIcon(url);
                 logoImage = new ImageIcon(logoImage.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
-
                 imgLogo.setIcon(logoImage);
-
+                supplier.setLogoImage(logoImage); // Update the supplier's logo image
             } catch (MalformedURLException ex) {
-                Logger.getLogger(this.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UpdateSupplierProfile.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Invalid file", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        //System.out.print(file.toPath() + " opened.");
         }
-        
     }//GEN-LAST:event_btnAttachActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         // TODO add your handling code here:
         
-        logoImage = null;
-        imgLogo.setIcon(logoImage);
+        supplier.setLogoImage(null);
+        imgLogo.setIcon(null);
         
     }//GEN-LAST:event_btnRemoveActionPerformed
 
@@ -252,16 +261,16 @@ public class AddSupplier extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backButton;
-    private javax.swing.JButton btnAddSupplier;
     private javax.swing.JButton btnAttach;
     private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel imgLogo;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 
