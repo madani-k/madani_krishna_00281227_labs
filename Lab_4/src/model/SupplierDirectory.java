@@ -12,8 +12,7 @@ import java.util.ArrayList;
  * @author Rushabh
  */
 public class SupplierDirectory {
-    
-        
+
     private ArrayList<Supplier> supplierList;
     
     public SupplierDirectory() {
